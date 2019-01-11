@@ -1,0 +1,30 @@
+{% extends 'back.html.twig' %}
+
+{% block content %}
+
+    <div class="card">
+  <div class="card-header">
+    {{ category.libelle }}
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">{{ category.slug }}</li>
+    <li class="list-group-item">{{ category.description }}</li>
+    <li class="list-group-item">creé le : {{ category.createdAt | date('d/m/Y H:i:s') }}</li>
+    <li class="list-group-item">modifié le : {{ category.updatedAt | date('d/m/Y H:i:s') }}</li>
+    <li class="list-group-item">
+        <a class="btn btn-default" href="{{ path('admin_category_index') }}">Retour</a>
+      
+            <a class="btn btn-warning" href="{{ path('admin_category_edit', { 'id': category.id }) }}">Edit</a>
+    </li>
+  </ul>
+</div>        
+     
+{% endblock %}
+
+{% block breadcrumb %}
+    <ul class="breadcrumb">
+        <li><a href="">Tableau de bord</a></li>/
+        <li class="{{ path('admin_category_new') }}">Liste des categories</li>/
+        <li class="active">{{ category.libelle }}</li>
+    </ul>
+{% endblock %}

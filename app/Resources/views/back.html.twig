@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <link rel="stylesheet" type="text/css" href="{{ asset('back/bootstrap.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('back/fontawesome/css/font-awesome.min.css') }}">
+    </head>
+    <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">appSymfony</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarColor02">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Accueil <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Blog</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">About US</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Contact</a>
+      </li>
+    </ul>
+
+    <ul class="navbar-nav navbar-right">
+      {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+      <li class="nav-item">
+        <a class="nav-link" href="#">{{ app.user.username }}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ path('fos_user_security_logout') }}">Log Out</a>
+      </li>
+      {% else  %}
+      <li class="nav-item">
+        <a class="nav-link" href="{{ path('fos_user_security_login') }}">Login</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ path('fos_user_registration_register') }}">Register</a>
+      </li>
+      {% endif %}
+    </ul>
+
+  </div>
+</nav>
+      <div class="container-fluid">
+        <div class="row mt-2">
+          <div class="col-md-4" >
+            {% block breadcrumb %}{% endblock %}
+          </div>
+          <div class="col-md-8" align="right" id="app">
+            <select v-on:change="getAccesRapide" name="accesRapide" v-model="accesRapide">
+              {% verbatim %}
+              <option v-for="acces in listAccesRapide" v-bind:value="acces.lien">{{ acces.libelle }}</option>
+              {% endverbatim %}
+            </select>
+          </div> 
+        </div>
+        <div class="row">
+          <div class="col-md-2">
+            <!--ul.list-group>(li.list-group-item>a)*6-->
+            <ul class="list-group">
+              <li class="list-group-item"><a href="">Dashboard</a></li>
+              <li class="list-group-item">Catégories</li>
+              <li class="list-group-item"><a href="{{ path('admin_category_index') }}">List of Categories</a></li>
+              <li class="list-group-item"><a href="{{ path('admin_category_new') }}">New Category</a></li>
+              <li class="list-group-item">Articles</li>
+              <li class="list-group-item"><a href="{{ path('admin_post_index') }}">List of Articles</a></li>
+              <li class="list-group-item"><a href="{{ path('admin_post_new') }}">New Article</a></li>
+              <li class="list-group-item">Administration</li>
+              <li class="list-group-item"><a href="">Statistics</a></li>
+              <li class="list-group-item"><a href="">Parameters</a></li>
+            </ul>
+          </div>
+          <div class="col-md-10">
+            {{ include('alert.html.twig') }}
+
+            {% block content %}{% endblock %}
+            
+          </div>
+        </div>
+      </div>
+        <script type="text/javascript" src="{{ asset('js/vue.min.js') }}"></script>
+        <script>
+          var myApp = new Vue({
+            el: "#app",
+            data: {
+                accesRapide: "",
+                listAccesRapide: [
+                    {libelle: "Quick Access", lien: ""},
+                    {libelle: "New Article", lien: "/admin/category/new"},
+                    {libelle: "New Category", lien: "/admin/category/new"}
+                ]
+            },
+            methods: {
+                getAccesRapide: function(){
+                  window.location = this.accesRapide;
+                }
+            }
+          });
+        </script>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>
+  
